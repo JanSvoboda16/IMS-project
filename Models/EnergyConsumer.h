@@ -4,15 +4,14 @@
 class EnergyConsumer: public Process{
     private:
         double _consumption;
-        bool _blocking;
         double _duration;
         double _timeStart;
         int _step = 60;  
         double _lastAdd;
         std::shared_ptr<EnergyStore> _energyStore;
-
+        Facility consumerFacility;
     public:
-        Facility facility; 
+        Facility UserFacility; 
         EnergyConsumer(const std::shared_ptr<EnergyStore> &energyStore, double consumption){
             _energyStore=energyStore;
             _consumption=consumption;
@@ -27,6 +26,7 @@ class EnergyConsumer: public Process{
         }
         void Behavior(){
             while(true){
+                Seize(consumerFacility);
                 _timeStart = Time;
                 auto timeEnd = _timeStart + _duration;
                 while(true){
@@ -42,6 +42,7 @@ class EnergyConsumer: public Process{
                         Wait(_step);
                     }                
                 }
+                Release(consumerFacility);
                 Passivate(); 
             }
         }
