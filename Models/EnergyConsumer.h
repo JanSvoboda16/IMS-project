@@ -1,6 +1,7 @@
 #pragma once
 #include "simlib.h"
 #include "EnergyStore.h"
+#include <iostream>
 class EnergyConsumer: public Process{
     private:
         double _consumption;
@@ -8,33 +9,30 @@ class EnergyConsumer: public Process{
         double _timeStart;
         int _step = 60;  
         double _lastAdd;
+        bool _usePrivilegy;
         std::shared_ptr<EnergyStore> _energyStore;
-        Facility consumerFacility;
+
     public:
-        Facility UserFacility; 
-        EnergyConsumer(const std::shared_ptr<EnergyStore> &energyStore, double consumption){
+        Store TurnOnPrivilegy;
+        EnergyConsumer(const std::shared_ptr<EnergyStore> &energyStore, double consumption, bool usePrivilegy =true): TurnOnPrivilegy(1) {
+            _usePrivilegy = usePrivilegy;
             _energyStore=energyStore;
             _consumption=consumption;
         }
-        void Start(double duration){
+        virtual void Start(double duration, double defer=0){
             _duration = duration;
-            Activate();
-        }
-        void Stop(){
-            _energyStore->AddEnergy((_step -(Time-_lastAdd))*_consumption);
-            Passivate();
+            Activate(Time+defer);                    
         }
         void Behavior(){
             while(true){
-                Seize(consumerFacility);
                 _timeStart = Time;
                 auto timeEnd = _timeStart + _duration;
                 while(true){
                     if(Time+_step>timeEnd){
-                        _step = timeEnd-Time;
+                        auto _step2 = timeEnd-Time;
                         _lastAdd = Time;
-                        _energyStore->RemoveEnergy(_step*_consumption);
-                        Wait(_step);
+                        _energyStore->RemoveEnergy(_step2*_consumption);
+                        Wait(_step2);
                         break;                    
                     }else{
                         _lastAdd = Time;
@@ -42,7 +40,9 @@ class EnergyConsumer: public Process{
                         Wait(_step);
                     }                
                 }
-                Release(consumerFacility);
+                if(_usePrivilegy){
+                    Leave(TurnOnPrivilegy);
+                }
                 Passivate(); 
             }
         }

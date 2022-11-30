@@ -2,10 +2,11 @@
 #include <map>
 #include "EnergyConsumer.h"
 #include "EnergyGenerator.h"
+#include "Children.h"
 
 #define SIM_TIME 31536000
 #define BATTERY_CAPACITY 20000*3600
-#define PANEL_COUNT 18
+#define PANEL_COUNT 4
 
 int main(int argc, char const *argv[])
 {
@@ -19,8 +20,9 @@ int main(int argc, char const *argv[])
     panels->Activate();    
 
     /* Definice spotřebičů */
-    (consumers["Fridge"] = new EnergyConsumer(battery,17))->Start(SIM_TIME); // Nstartování lednice
-    (consumers["Others"] = new EnergyConsumer(battery,10))->Start(SIM_TIME);
+    
+    (consumers["Fridge"] = new EnergyConsumer(battery,17,false))->Start(SIM_TIME); // Nstartování lednice
+    (consumers["Others"] = new EnergyConsumer(battery,10,false))->Start(SIM_TIME);
     consumers["Kettle"] = new EnergyConsumer(battery,2000);
     consumers["Microwave"] = new EnergyConsumer(battery,1200);
     consumers["Vacuum"] = new EnergyConsumer(battery,700);
@@ -34,6 +36,8 @@ int main(int argc, char const *argv[])
     consumers["Notebook3"] = new EnergyConsumer(battery,45);
     consumers["Notebook4"] = new EnergyConsumer(battery,45);
     consumers["Boiler"] = new EnergyConsumer(battery,2200);
+    (new Children(consumers))->Activate(21600);    
+
     
 
     Run();
