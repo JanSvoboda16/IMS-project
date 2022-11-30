@@ -2,17 +2,12 @@
 #include "simlib.h"
 #include "EnergyConsumer.h"
 #include <map>
+#include "TimeTransfer.h"
 
 class Children : public Process{
 private:
     std::map<std::string, EnergyConsumer*> _consumers;
 
-    int getDay(){
-        return (int)Time/24/60/60;
-    }
-    int GetTime(int day, int hour, int minute, int second ){
-        return ((day*24+hour)*60 + minute)*60 + second;
-    }
 public:
     Children(std::map<std::string, EnergyConsumer*> consumers){
         _consumers = consumers;
