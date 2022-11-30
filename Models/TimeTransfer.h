@@ -13,10 +13,10 @@ int DaysToSec(int days){
     return days * 24 * 60 * 60;
 }
 
-int HoursToSec(int hours){
-    return hours * 60 * 60;
+int HoursToSec(double hours){
+    return (int)(hours * 60 * 60);
 }
 
-int MinsToSec(int minutes){
-    return minutes * 60;
+int MinsToSec(double minutes){
+    return (int)(minutes * 60);
 }

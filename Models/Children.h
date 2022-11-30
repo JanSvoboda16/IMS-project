@@ -25,6 +25,7 @@ public:
             consumer->Start(60); // 2 min/l -> 0.5 l            
             Wait(20);
 
+            // ohřeje si snídani
             consumer =_consumers["Microwave"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(90); // 1.5 min -> snídaně
@@ -35,7 +36,16 @@ public:
                 Activate(GetTime(today,15,0,0));
                 
                 // Po příchodu za 0 - 3 h
-                Wait(Uniform(0,3*60*60)); 
+                Wait(Uniform(0,HoursToSec(3))); 
+
+                // Vysaje si pokoj
+                if(Random() <= 0.2){    // 20%
+                    consumer = _consumers["Vacuum"];
+                    Enter(consumer->TurnOnPrivilegy);
+                    auto jobTime = Normal(MinsToSec(5),MinsToSec(1));
+                    consumer->Start(jobTime);    // cca 5 min vysává      
+                    Wait(jobTime);
+                }
 
                 // Zapne si počítač
                 consumer = _consumers["Notebook1"]; 
@@ -44,22 +54,40 @@ public:
                 }    
 
                 Enter(consumer->TurnOnPrivilegy);
-                auto timeOnComputer = Uniform(30*60, 4*60*60);
+                auto timeOnComputer = Uniform(MinsToSec(30), HoursToSec(4));
                 consumer->Start(timeOnComputer); // Dítě stráví u počítače 0.5 - 4 hodiny
                 Wait(timeOnComputer);
-
-
-
                 
             }else{
 
+                // Po ránu za 0 - 2 h
+                Wait(Uniform(0,HoursToSec(2))); 
+
+                // Vysaje si pokoj
+                if(Random() <= 0.5){    // 50%
+                    consumer = _consumers["Vacuum"];
+                    Enter(consumer->TurnOnPrivilegy);
+                    auto jobTime = Normal(MinsToSec(5),MinsToSec(1));
+                    consumer->Start(jobTime);    // cca 5 min vysává      
+                    Wait(jobTime);
+                }
+
+                // Zapne si počítač
+                consumer = _consumers["Notebook1"]; 
+                if(consumer->TurnOnPrivilegy.Empty()){
+                    consumer = _consumers["Notebook2"];
+                }    
+
+                Enter(consumer->TurnOnPrivilegy);
+                auto timeOnComputer = Uniform(HoursToSec(2), HoursToSec(8));
+                consumer->Start(timeOnComputer); // Dítě stráví u počítače 2 - 8 hodin
+                Wait(timeOnComputer);
             }
              
-
             
-
+            // sprcha
             //_consumers["Boiler"]->Start(70); 
-            Activate(GetTime(today+1,6,0,0));
+            Activate(GetTime(today+1,6,45,0));
         }    
     }
 };

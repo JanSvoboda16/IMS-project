@@ -3,6 +3,7 @@
 #include "EnergyConsumer.h"
 #include "EnergyGenerator.h"
 #include "Children.h"
+#include "Parent.h"
 
 #define SIM_TIME 31536000
 #define BATTERY_CAPACITY 20000*3600
@@ -36,7 +37,8 @@ int main(int argc, char const *argv[])
     consumers["Notebook3"] = new EnergyConsumer(battery,45);
     consumers["Notebook4"] = new EnergyConsumer(battery,45);
     consumers["Boiler"] = new EnergyConsumer(battery,2200);
-    (new Children(consumers))->Activate(21600);    
+    (new Children(consumers))->Activate(24300); 
+    (new Parent(consumers))->Activate(21600);   
 
     
 
