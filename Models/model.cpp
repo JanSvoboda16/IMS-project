@@ -41,8 +41,8 @@ int main(int argc, char const *argv[])
     consumers["Boiler"] = new EnergyConsumer(battery,2200);
     (new Children(consumers, 1))->Activate(24300);
     (new Children(consumers, 2))->Activate(24300);
-    (new Parent(consumers, true))->Activate(21600);     // Matka
-    (new Parent(consumers, false))->Activate(21600);    // Otec
+    (new Parent(consumers, 1))->Activate(21600);     // Matka
+    (new Parent(consumers, 2))->Activate(21600);    // Otec
     (new Lights(consumers))->Activate(24301);
 
     

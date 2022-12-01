@@ -7,17 +7,17 @@
 class Parent : public Process{
 private:
     std::map<std::string, EnergyConsumer*> _consumers;
-    bool _matka;
+    int _id;
 
 public:
-    Parent(std::map<std::string, EnergyConsumer*> consumers, bool matka){
+    Parent(std::map<std::string, EnergyConsumer*> consumers, int id){
         _consumers = consumers;
-        _matka = matka;
+        _id = id;
     }
 
     void Behavior(){
         while(true){
-            if(_matka){ std::cout<< "Matka vstava\n";}
+            if(_id == 1){ std::cout<< "Matka vstava\n";}
             else{ std::cout<< "Otec vstava\n";}
 
             auto today = getDay();
@@ -32,7 +32,7 @@ public:
             Wait(Normal(20,2));
 
             // matka uvaří snídani
-            if(_matka){
+            if(_id == 1){
                 consumer = _consumers["Cooker"];
                 Enter(consumer->TurnOnPrivilegy);
                 auto jobTime = Normal(MinsToSec(20),MinsToSec(2));
@@ -47,7 +47,7 @@ public:
 
 
                 // otec vysaje
-                if(!_matka && Random() <= 0.2){    // 20%
+                if(_id == 2 && Random() <= 0.2){    // 20%
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(10),MinsToSec(1));
@@ -56,7 +56,7 @@ public:
                 }
 
                 // matka vypere
-                if(_matka && Random() <= 0.2){    // 20%
+                if(_id == 1 && Random() <= 0.2){    // 20%
                     consumer = _consumers["WashingMachine"];
                     Enter(consumer->TurnOnPrivilegy);
                     consumer->Start(HoursToSec(2));    
@@ -65,7 +65,7 @@ public:
                 Wait(Uniform(MinsToSec(10), MinsToSec(60)));
 
                 // matka zapne myčku
-                if(_matka && Random() <= 0.5){    // 50%
+                if(_id == 1 && Random() <= 0.5){    // 50%
                     consumer = _consumers["Dishwasher"];
                     Enter(consumer->TurnOnPrivilegy);
                     consumer->Start(HoursToSec(2));    
@@ -74,7 +74,7 @@ public:
                 Wait(Uniform(MinsToSec(10), MinsToSec(60)));
 
                 // Zapne si počítač
-                if(_matka){
+                if(_id == 1){
                     consumer = _consumers["Notebook3"]; 
                 }
                 else{
@@ -90,8 +90,8 @@ public:
             }
             else{   // víkend
 
-                // Vysaje
-                if(!_matka && Random() <= 0.5){    // 50% - pouze Otec
+                // otec Vysaje
+                if(_id == 2 && Random() <= 0.5){    // 50%
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(10),MinsToSec(1));
@@ -99,8 +99,8 @@ public:
                     Wait(jobTime);
                 }
 
-                // Vypere
-                if(_matka && Random() <= 0.5){    // 50% - pouze Matka
+                // matka Vypere
+                if(_id == 1 && Random() <= 0.5){    // 50%
                     consumer = _consumers["WashingMachine"];
                     Enter(consumer->TurnOnPrivilegy);
                     consumer->Start(HoursToSec(2));    
@@ -109,7 +109,7 @@ public:
                 Wait(Uniform(MinsToSec(10), MinsToSec(60)));
 
                 // Zapne si počítač
-                if(_matka){
+                if(_id == 1){
                     consumer = _consumers["Notebook3"]; 
                 }
                 else{
@@ -121,7 +121,7 @@ public:
                 Wait(timeOnComputer);
 
                 // Otec uvaří oběd
-                if(!_matka){
+                if(_id == 2){
                     consumer = _consumers["Cooker"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(HoursToSec(1),MinsToSec(10));
@@ -132,7 +132,7 @@ public:
                 Wait(Normal(MinsToSec(20), MinsToSec(4)));      // obědvá
 
                 // matka zapne myčku
-                if(_matka){
+                if(_id == 1){
                     consumer = _consumers["Dishwasher"];
                     Enter(consumer->TurnOnPrivilegy);
                     consumer->Start(HoursToSec(2));
@@ -141,7 +141,7 @@ public:
                 Wait(Uniform(MinsToSec(10), MinsToSec(40)));
 
                 // matka upeče buchtu
-                if(_matka && Random() < 0.5){
+                if(_id == 1 && Random() < 0.5){
                     consumer = _consumers["Oven"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(HoursToSec(1.5),MinsToSec(15));
@@ -158,7 +158,7 @@ public:
                 Wait(Normal(20,2));
 
                 // Zapne si počítač
-                if(_matka){
+                if(_id == 1){
                     consumer = _consumers["Notebook3"]; 
                 }
                 else{

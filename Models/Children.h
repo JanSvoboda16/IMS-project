@@ -41,7 +41,7 @@ public:
                 Wait(Uniform(0,HoursToSec(3))); 
 
                 // Vysaje si pokoj
-                if(_id == 1 && Random() <= 0.2){    // 20% - pouze dítě 1
+                if(Random() <= 0.2){    // 20%
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(5),MinsToSec(1));
@@ -67,7 +67,7 @@ public:
                 Wait(Uniform(0,HoursToSec(2))); 
 
                 // Vysaje si pokoj
-                if(_id == 1 && Random() <= 0.5){    // 50% - pouze Dítě 1
+                if(Random() <= 0.5){    // 50%
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(5),MinsToSec(1));
