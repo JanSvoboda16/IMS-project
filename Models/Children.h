@@ -3,16 +3,19 @@
 #include "EnergyConsumer.h"
 #include <map>
 #include "TimeTransfer.h"
+#include "Boiler.h"
 
 class Children : public Process{
 private:
     std::map<std::string, EnergyConsumer*> _consumers;
     int _id;
+    Boiler *_boiler;
 
 public:
-    Children(std::map<std::string, EnergyConsumer*> consumers, int id){
+    Children(std::map<std::string, EnergyConsumer*> consumers, int id, Boiler* boiler){
         _consumers = consumers;
         _id = id;
+        _boiler = boiler;
     }
     void Behavior(){
 
@@ -91,6 +94,14 @@ public:
             
             // sprcha
             //_consumers["Boiler"]->Start(70); 
+            
+
+            Wait(HoursToSec(Uniform(0.5,2)));
+            Seize(_boiler->ShowerFacility);
+            double showerTime = MinsToSec(Normal(10,2.5));
+            _boiler->RemoveWater(showerTime * 0.14, 40); // 0.14 l/s => naměřeno
+            Release(_boiler->ShowerFacility);
+
             Activate(GetTime(today+1,6,45,0));
         }    
     }

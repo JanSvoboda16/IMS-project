@@ -7,15 +7,15 @@
 #include "Lights.h"
 
 #define SIM_TIME 31536000
-#define BATTERY_CAPACITY 20000*3600
-#define PANEL_COUNT 4
+#define BATTERY_CAPACITY 200000*3600
+#define PANEL_COUNT 18
 
 int main(int argc, char const *argv[])
 {
     Init(0, SIM_TIME);
     std::map<std::string, EnergyConsumer*> consumers;
     std::shared_ptr<EnergyStore> battery = std::make_shared<EnergyStore>(BATTERY_CAPACITY);
-    battery->AddEnergy(BATTERY_CAPACITY);
+    battery->AddEnergy(BATTERY_CAPACITY/2);
 
     EnergyGenerator* panels = new EnergyGenerator("data.csv", PANEL_COUNT, battery);
 
@@ -38,14 +38,13 @@ int main(int argc, char const *argv[])
     consumers["Notebook2"] = new EnergyConsumer(battery,45);
     consumers["Notebook3"] = new EnergyConsumer(battery,45);
     consumers["Notebook4"] = new EnergyConsumer(battery,45);
-    consumers["Boiler"] = new EnergyConsumer(battery,2200);
-    (new Children(consumers, 1))->Activate(24300);
-    (new Children(consumers, 2))->Activate(24300);
-    (new Parent(consumers, true))->Activate(21600);     // Matka
-    (new Parent(consumers, false))->Activate(21600);    // Otec
-    (new Lights(consumers))->Activate(24301);
 
-    
+    Boiler* boiler = new Boiler(60,15,2000,battery);
+    (new Children(consumers, 1, boiler))->Activate(24300);
+    (new Children(consumers, 2, boiler))->Activate(24300);
+    (new Parent(consumers, true, boiler))->Activate(21600);     // Matka
+    (new Parent(consumers, false, boiler))->Activate(21600);    // Otec
+    (new Lights(consumers))->Activate(24301);    
 
     Run();
 

@@ -17,25 +17,25 @@ public:
         while(true){
             auto today = getDay();
 
-            std::cout<< "Svetla: ON\n";
+            //std::cout<< "Svetla: ON\n";
             // 6:00 Zapnout
             auto consumer = _consumers["BulbSmall"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(HoursToSec(1.5));
             Wait(HoursToSec(1.5));           
             // 7:30 Vypnout
-            std::cout<< "Svetla: OFF\n";
+           // std::cout<< "Svetla: OFF\n";
 
             Activate(GetTime(today,18,0,0));
 
-            std::cout<< "Svetla: ON\n";
+            //std::cout<< "Svetla: ON\n";
             // 18:00 Zapnout
             consumer = _consumers["BulbBig"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(HoursToSec(5));
             Wait(HoursToSec(5));           
             // 23:00 Vypnout
-            std::cout<< "Svetla: OFF\n";
+            //std::cout<< "Svetla: OFF\n";
 
             Activate(GetTime(today+1,6,0,1));
         }

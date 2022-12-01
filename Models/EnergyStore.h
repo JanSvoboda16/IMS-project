@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <iostream>
 class EnergyStore{
     private:
         double _capacity = 0, _overflowed = 0, _undeflowed=0, _value=0;
@@ -21,6 +22,8 @@ class EnergyStore{
             else{
                 _value += energy;
             }
+
+            std::cout << (int)Time << ";" << (int)_value << "\n";
         }
         void RemoveEnergy(double energy){
             if((_value-energy)<0){                
@@ -30,5 +33,7 @@ class EnergyStore{
             else{
                 _value -= energy;
             }
+
+            std::cout << (int)Time << ";" << (int)_value << "\n";
         }
 };
