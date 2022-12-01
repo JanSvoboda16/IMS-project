@@ -4,6 +4,7 @@
 #include "EnergyGenerator.h"
 #include "Children.h"
 #include "Parent.h"
+#include "Lights.h"
 
 #define SIM_TIME 31536000
 #define BATTERY_CAPACITY 20000*3600
@@ -31,14 +32,18 @@ int main(int argc, char const *argv[])
     consumers["Dishwasher"] = new EnergyConsumer(battery,370);
     consumers["Cooker"] = new EnergyConsumer(battery,2000);        // 2 plotynky
     consumers["Oven"] = new EnergyConsumer(battery,900);
-    consumers["Bulb"] = new EnergyConsumer(battery,8.5);          // 1 zarovka
+    consumers["BulbSmall"] = new EnergyConsumer(battery,4*8.5);          // 4 zarovky
+    consumers["BulbBig"] = new EnergyConsumer(battery,7*8.5);          // 7 zarovek
     consumers["Notebook1"] = new EnergyConsumer(battery,45);
     consumers["Notebook2"] = new EnergyConsumer(battery,45);
     consumers["Notebook3"] = new EnergyConsumer(battery,45);
     consumers["Notebook4"] = new EnergyConsumer(battery,45);
     consumers["Boiler"] = new EnergyConsumer(battery,2200);
-    (new Children(consumers))->Activate(24300); 
-    (new Parent(consumers))->Activate(21600);   
+    (new Children(consumers, 1))->Activate(24300);
+    (new Children(consumers, 2))->Activate(24300);
+    (new Parent(consumers, true))->Activate(21600);     // Matka
+    (new Parent(consumers, false))->Activate(21600);    // Otec
+    (new Lights(consumers))->Activate(24301);
 
     
 

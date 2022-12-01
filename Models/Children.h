@@ -7,15 +7,17 @@
 class Children : public Process{
 private:
     std::map<std::string, EnergyConsumer*> _consumers;
+    int _id;
 
 public:
-    Children(std::map<std::string, EnergyConsumer*> consumers){
+    Children(std::map<std::string, EnergyConsumer*> consumers, int id){
         _consumers = consumers;
+        _id = id;
     }
     void Behavior(){
 
         while(true){
-            std::cout<< "Dite vstava\n";
+            std::cout<< "Dite " << _id << " vstava\n";
             auto today = getDay();
             //_consumers["Boiler"]->Start(60);
             
@@ -39,7 +41,7 @@ public:
                 Wait(Uniform(0,HoursToSec(3))); 
 
                 // Vysaje si pokoj
-                if(Random() <= 0.2){    // 20%
+                if(_id == 1 && Random() <= 0.2){    // 20% - pouze dítě 1
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(5),MinsToSec(1));
@@ -48,11 +50,12 @@ public:
                 }
 
                 // Zapne si počítač
-                consumer = _consumers["Notebook1"]; 
-                if(consumer->TurnOnPrivilegy.Empty()){
+                if(_id == 1){
+                    consumer = _consumers["Notebook1"]; 
+                }
+                else{
                     consumer = _consumers["Notebook2"];
-                }    
-
+                }
                 Enter(consumer->TurnOnPrivilegy);
                 auto timeOnComputer = Uniform(MinsToSec(30), HoursToSec(4));
                 consumer->Start(timeOnComputer); // Dítě stráví u počítače 0.5 - 4 hodiny
@@ -64,7 +67,7 @@ public:
                 Wait(Uniform(0,HoursToSec(2))); 
 
                 // Vysaje si pokoj
-                if(Random() <= 0.5){    // 50%
+                if(_id == 1 && Random() <= 0.5){    // 50% - pouze Dítě 1
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(5),MinsToSec(1));
@@ -73,11 +76,12 @@ public:
                 }
 
                 // Zapne si počítač
-                consumer = _consumers["Notebook1"]; 
-                if(consumer->TurnOnPrivilegy.Empty()){
+                if(_id == 1){
+                    consumer = _consumers["Notebook1"]; 
+                }
+                else{
                     consumer = _consumers["Notebook2"];
                 }    
-
                 Enter(consumer->TurnOnPrivilegy);
                 auto timeOnComputer = Uniform(HoursToSec(2), HoursToSec(8));
                 consumer->Start(timeOnComputer); // Dítě stráví u počítače 2 - 8 hodin
