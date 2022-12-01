@@ -10,7 +10,7 @@ class Boiler : public Process {
     std::shared_ptr<EnergyStore> _battery;
     bool isActive = false;
 public:
-
+    Facility ShowerFacility;
     Boiler(double tempToHeat, double inputTemp, double power, std::shared_ptr<EnergyStore> battery){
         _tempToHeat = tempToHeat;
         _inputTemp = inputTemp;

@@ -3,15 +3,18 @@
 #include "EnergyConsumer.h"
 #include <map>
 #include "TimeTransfer.h"
+#include "Boiler.h"
 
 class Parent : public Process{
 private:
     std::map<std::string, EnergyConsumer*> _consumers;
+    Boiler* _boiler;
     int _id;
 
 public:
-    Parent(std::map<std::string, EnergyConsumer*> consumers, int id){
+    Parent(std::map<std::string, EnergyConsumer*> consumers, int id, Boiler* boiler){
         _consumers = consumers;
+        _boiler = boiler;
         _id = id;
     }
 
@@ -169,6 +172,14 @@ public:
                 consumer->Start(timeOnComputer); // Rodič stráví u počítače 1.5 - 3 hodiny
                 Wait(timeOnComputer);
             }
+
+
+            Wait(HoursToSec(Uniform(0.5,2)));
+            Seize(_boiler->ShowerFacility);
+            double showerTime = MinsToSec(Normal(10,2.5));
+            _boiler->RemoveWater(showerTime * 0.14, 40); // 0.14 l/s => naměřeno
+            Wait(showerTime);
+            Release(_boiler->ShowerFacility);
 
             Activate(GetTime(today+1,6,0,0));
 
