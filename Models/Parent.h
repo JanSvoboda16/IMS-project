@@ -25,9 +25,6 @@ public:
 
             auto today = getDay();
 
-            // sprcha
-            //_consumers["Boiler"]->Start(60);
-
             // Uvaří si čaj
             auto consumer = _consumers["Kettle"];
             Enter(consumer->TurnOnPrivilegy);
@@ -42,6 +39,8 @@ public:
                 consumer->Start(jobTime);    // cca 20 min vaří snídani       
                 Wait(jobTime);
             }
+
+            Activate(GetTime(today,7,0,0));
 
             if(today % 7 < 5){  // všední den
                 

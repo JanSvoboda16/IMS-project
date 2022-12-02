@@ -22,7 +22,6 @@ public:
         while(true){
             std::cout<< "Dite " << _id << " vstava\n";
             auto today = getDay();
-            //_consumers["Boiler"]->Start(60);
             
             // Uvaří si čaj
             auto consumer = _consumers["Kettle"];
@@ -34,6 +33,8 @@ public:
             consumer =_consumers["Microwave"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(90); // 1.5 min -> snídaně
+
+            Activate(GetTime(today,7,30,0));
 
             if(today%7<5){ // Všední den
 
@@ -92,11 +93,9 @@ public:
             }
              
             
-            // sprcha
-            //_consumers["Boiler"]->Start(70); 
-            
-
             Wait(HoursToSec(Uniform(0.5,2)));
+            
+            // sprcha           
             Seize(_boiler->ShowerFacility);
             double showerTime = MinsToSec(Normal(10,2.5));
             _boiler->RemoveWater(showerTime * 0.14, 40); // 0.14 l/s => naměřeno
