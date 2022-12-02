@@ -58,8 +58,8 @@ int main(int argc, char const* argv[]) {
     Boiler* boiler = new Boiler(60, 15, 2000, battery);
     (new Children(consumers, 1, boiler))->Activate(24300);
     (new Children(consumers, 2, boiler))->Activate(24300);
-    (new Parent(consumers, true, boiler))->Activate(21600);   // Matka
-    (new Parent(consumers, false, boiler))->Activate(21600);  // Otec
+    (new Parent(consumers, 1, boiler))->Activate(21600);   // Matka
+    (new Parent(consumers, 2, boiler))->Activate(21600);  // Otec
     (new Lights(consumers))->Activate(24301);
 
     // Výpis statistik do souborů
