@@ -10,12 +10,14 @@ private:
     std::map<std::string, EnergyConsumer*> _consumers;
     Boiler* _boiler;
     int _id;
+    int _firstDayOfSim;
 
 public:
-    Parent(std::map<std::string, EnergyConsumer*> consumers, int id, Boiler* boiler){
+    Parent(std::map<std::string, EnergyConsumer*> consumers, int id, Boiler* boiler, int firstDayOfSim){
         _consumers = consumers;
         _boiler = boiler;
         _id = id;
+        _firstDayOfSim = firstDayOfSim;
     }
 
     void Behavior(){
@@ -24,6 +26,17 @@ public:
             else{ std::cout<< "Otec vstava\n";}
 
             auto today = getDay();
+            auto dayInYear = today + _firstDayOfSim;
+            bool summerTime = false;
+
+           if (dayInYear > 90 && dayInYear < 304) {
+                summerTime = true;                
+            }else{
+                Wait(HoursToSec(1));
+            }
+
+            // sprcha
+            //_consumers["Boiler"]->Start(60);
 
             // Uvaří si čaj
             auto consumer = _consumers["Kettle"];
@@ -40,12 +53,12 @@ public:
                 Wait(jobTime);
             }
 
-            Activate(GetTime(today,7,0,0));
+            Activate(GetTime(today,7-summerTime,30,0));
 
             if(today % 7 < 5){  // všední den
                 
                 // Návrat z Práce 16:30
-                Activate(GetTime(today,16,30,0));
+                Activate(GetTime(today,16-summerTime,30,0));
 
 
                 // otec vysaje
@@ -180,7 +193,7 @@ public:
             Wait(showerTime);
             Release(_boiler->ShowerFacility);
 
-            Activate(GetTime(today+1,6,0,0));
+            Activate(GetTime(today+1,6-1,0,0));
 
         }
     }

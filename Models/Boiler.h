@@ -33,18 +33,21 @@ class Boiler : public Process {
             while (_litresToHeat > 0) {
                 double step = _maxStep;
                 double energy = _power * _maxStep;
-                _battery->RemoveEnergy(energy);
+                
                 double deltaT = _tempToHeat - _inputTemp;
-                double heatedLitres = energy / (4200 * (deltaT));
+                double heatedLitres = energy / (4200 * (deltaT)) * 0.85;
                 _litresToHeat -= heatedLitres;
 
                 // Vrácení energie za přebytečnou vodu
                 if (_litresToHeat < 0) {
                     double overflowed = 0 - _litresToHeat;
-                    _battery->AddEnergy(overflowed * 4200 * deltaT);
+                    energy -= overflowed * 4200 * deltaT/ 0.85;
+                    step = energy/_power;
                     _litresToHeat = 0;
                 }
-                Wait(_maxStep);
+                
+                _battery->RemoveEnergy(energy, step);
+                Wait(step);
             }
             isActive = false;
             Passivate();

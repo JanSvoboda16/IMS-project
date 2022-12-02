@@ -8,7 +8,8 @@
 #include "Parent.h"
 #include "simlib.h"
 
-#define SIM_TIME 31536000
+#define SIM_LENGTH 31536000
+#define FIRST_DAY_OF_SIM 31
 
 int main(int argc, char const* argv[]) {
     
@@ -23,12 +24,12 @@ int main(int argc, char const* argv[]) {
     if (argc >4){
        logFrom = stod(argv[4]);
     }
-    double duration = SIM_TIME - logFrom;
+    double duration = SIM_LENGTH - logFrom;
     if (argc >5){
         duration = stod(argv[5]);
     }
 
-    Init(0, SIM_TIME);
+    Init(0, SIM_LENGTH);
     std::map<std::string, EnergyConsumer*> consumers;
     std::shared_ptr<EnergyStore> battery = std::make_shared<EnergyStore>(batteryCapacity);
     battery->AddEnergy(batteryCapacity / 2);
@@ -39,8 +40,8 @@ int main(int argc, char const* argv[]) {
 
     /* Definice spotřebičů */
 
-    (consumers["Fridge"] = new EnergyConsumer(battery, 17, false))->Start(SIM_TIME);  // Nstartování lednice
-    (consumers["Others"] = new EnergyConsumer(battery, 10, false))->Start(SIM_TIME);
+    (consumers["Fridge"] = new EnergyConsumer(battery, 17, false))->Start(SIM_LENGTH);  // Nstartování lednice
+    (consumers["Others"] = new EnergyConsumer(battery, 10, false))->Start(SIM_LENGTH);
     consumers["Kettle"] = new EnergyConsumer(battery, 2000);
     consumers["Microwave"] = new EnergyConsumer(battery, 1200);
     consumers["Vacuum"] = new EnergyConsumer(battery, 700);
@@ -56,10 +57,10 @@ int main(int argc, char const* argv[]) {
     consumers["Notebook4"] = new EnergyConsumer(battery, 45);
 
     Boiler* boiler = new Boiler(60, 15, 2000, battery);
-    (new Children(consumers, 1, boiler))->Activate(24300);
-    (new Children(consumers, 2, boiler))->Activate(24300);
-    (new Parent(consumers, 1, boiler))->Activate(21600);   // Matka
-    (new Parent(consumers, 2, boiler))->Activate(21600);  // Otec
+    (new Children(consumers, 1, boiler, FIRST_DAY_OF_SIM))->Activate(24300);
+    (new Children(consumers, 2, boiler, FIRST_DAY_OF_SIM))->Activate(24300);
+    (new Parent(consumers, 1, boiler, FIRST_DAY_OF_SIM))->Activate(21600);   // Matka
+    (new Parent(consumers, 2, boiler, FIRST_DAY_OF_SIM))->Activate(21600);  // Otec
     (new Lights(consumers))->Activate(24301);
 
     // Výpis statistik do souborů
@@ -69,8 +70,8 @@ int main(int argc, char const* argv[]) {
 
     Run();
 
-    std::cout << "Celkový počet dokoupené energie: " << battery->GetOverflowed() / 3600000 << " kWh \n";
-    std::cout << "Celkový počet prodané energie: " << battery->GetUnderflowed() / 3600000 << " kWh \n";
+    std::cout << "Celkový počet prodané energie: " << battery->GetOverflowed() / 3600000 << " kWh \n";
+    std::cout << "Celkový počet dokoupené energie: " << battery->GetUnderflowed() / 3600000 << " kWh \n";
 
     return 0;
 }

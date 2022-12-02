@@ -31,12 +31,12 @@ class EnergyConsumer: public Process{
                     if(Time+_step>timeEnd){
                         auto _step2 = timeEnd-Time;
                         _lastAdd = Time;
-                        _energyStore->RemoveEnergy(_step2*_consumption);
+                        _energyStore->RemoveEnergy(_step2*_consumption,_step2);
                         Wait(_step2);
                         break;                    
                     }else{
                         _lastAdd = Time;
-                        _energyStore->RemoveEnergy(_step*_consumption);
+                        _energyStore->RemoveEnergy(_step*_consumption,_step);
                         Wait(_step);
                     }                
                 }
