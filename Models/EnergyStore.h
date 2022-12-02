@@ -3,7 +3,7 @@
 #include <memory>
 class EnergyStore {
    private:
-    double _capacity = 0, lastAddedTime=0, lastPower= 0, _overflowed = 0, _undeflowed = 0, _value = 0, _efficiency = 0.8;
+    double _capacity = 0, buffer = 0, _overflowed = 0, _undeflowed = 0, _value = 0, _efficiency = 0.8;
 
    public:
     double GetValue() {
@@ -20,25 +20,27 @@ class EnergyStore {
     }
     void AddEnergy(double energy) {
 
+        auto lastenergy= buffer;
+        buffer = energy;
         //Započítáváme okamžitý příkon s příhlédnutím na předcházející
-        if(Time - lastAddedTime > 0.01){
-            lastPower = energy/(Time-lastAddedTime);
-            lastAddedTime = Time;
-        }
+        lastenergy /=_efficiency;
 
         // Dobíjení energie
-        if ((_value + energy) > _capacity) {
-            _overflowed += energy - (_capacity - _value);
+        if ((_value + lastenergy) > _capacity) {
+            _overflowed += (lastenergy - (_capacity - _value)) *_efficiency;
             _value = _capacity;
         } else {
-            _value += energy;
+            _value += lastenergy;
         }
     }
-    void RemoveEnergy(double energy, double step) {
+    void RemoveEnergy(double energy) {
 
-        if(energy/step > lastPower){
-            //Připočítáme ztráty k energii získané z baterie
-            energy += (energy - (lastPower*step))*(1-_efficiency);
+        if(buffer > energy){
+            buffer-=energy;
+            energy=0;
+        }else{
+            energy-=buffer;
+            buffer=0;            
         }
 
         // Baterie

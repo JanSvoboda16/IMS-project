@@ -46,7 +46,7 @@ class Boiler : public Process {
                     _litresToHeat = 0;
                 }
                 
-                _battery->RemoveEnergy(energy, step);
+                _battery->RemoveEnergy(energy);
                 Wait(step);
             }
             isActive = false;
