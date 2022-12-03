@@ -13,7 +13,7 @@ using namespace std;
 
 class EnergyGenerator: public Event{
     private:
-        double time, power;
+        double time, current;
         shared_ptr<EnergyStore> _output;
         int _counter = 0;
         int _multiplicator;
@@ -26,10 +26,10 @@ class EnergyGenerator: public Event{
                 auto delimPos = line.find(';');
                 time = stod(line.substr(0, delimPos));
                 auto valueStr = line.substr(delimPos+1);
-                power = stod(valueStr);    
+                current = stod(valueStr);    
             }else{
                 end = true;
-                power =0;
+                current =0;
                 time = time+1;
             }        
         }
@@ -45,7 +45,7 @@ class EnergyGenerator: public Event{
 
         void Behavior(){            
             readNext();
-            _output->AddEnergy(power*(time-Time)*230.0*_multiplicator);
+            _output->AddEnergy(current*(time-Time)*230.0*_multiplicator);
             Activate(time);
         }
 };

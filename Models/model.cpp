@@ -64,12 +64,17 @@ int main(int argc, char const* argv[]) {
     (new Lights(consumers))->Activate(24301);
 
     // Výpis statistik do souborů
-    (new Logger<EnergyStore, double, int>(logStep, battery.get(), &EnergyStore::GetValue, logFrom, logFrom + duration, "battery_value.csv"))->Activate();
-    (new Logger<EnergyStore, double, int64_t>(logStep, battery.get(), &EnergyStore::GetOverflowed, logFrom, logFrom + duration, "battery_overflowed.csv"))->Activate();
-    (new Logger<EnergyStore, double, int64_t>(logStep, battery.get(), &EnergyStore::GetUnderflowed, logFrom, logFrom + duration, "battery_underflowed.csv"))->Activate();
+    auto logger = new Logger<EnergyStore, double, int>(logStep, battery.get(), &EnergyStore::GetValue, logFrom, logFrom + duration, "battery_value.csv");
+    logger->Activate();
+    auto logger2 = new Logger<EnergyStore, double, int64_t>(logStep, battery.get(), &EnergyStore::GetOverflowed, logFrom, logFrom + duration, "battery_overflowed.csv");
+    logger2->Activate();
+    auto logger3=new Logger<EnergyStore, double, int64_t>(logStep, battery.get(), &EnergyStore::GetUnderflowed, logFrom, logFrom + duration, "battery_underflowed.csv");
+    logger3->Activate();
 
     Run();
-
+    delete logger;
+    delete logger2;
+    delete logger3;
     std::cout << "Celkový počet prodané energie: " << battery->GetOverflowed() / 3600000 << " kWh \n";
     std::cout << "Celkový počet dokoupené energie: " << battery->GetUnderflowed() / 3600000 << " kWh \n";
 

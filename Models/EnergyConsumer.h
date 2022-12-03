@@ -13,6 +13,7 @@ class EnergyConsumer: public Process{
         std::shared_ptr<EnergyStore> _energyStore;
 
     public:
+        // Zamezuje spuštění před dokončením činnosti
         Store TurnOnPrivilegy;
         EnergyConsumer(const std::shared_ptr<EnergyStore> &energyStore, double consumption, bool usePrivilegy =true): TurnOnPrivilegy(1) {
             _usePrivilegy = usePrivilegy;

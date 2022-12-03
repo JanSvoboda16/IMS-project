@@ -22,7 +22,7 @@ class Children : public Process {
     }
     void Behavior() {
         while (true) {
-            auto today = getDay();
+            auto today = GetDay();
             auto dayInYear = today + _firstDayOfSim;
             bool summerTime = false;
 
@@ -98,6 +98,12 @@ class Children : public Process {
                 Wait(timeOnComputer);
             }
 
+
+            auto evening = GetTime(today, 20-summerTime,0,0);
+            if(Time < evening){
+                Activate(evening);
+            }
+            
             Wait(HoursToSec(Uniform(0.5, 2)));
 
             // sprcha

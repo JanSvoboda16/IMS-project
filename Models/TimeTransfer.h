@@ -1,7 +1,7 @@
 #pragma once
 #include "simlib.h"
 
-int getDay(){
+int GetDay(){
     return (int)Time/24/60/60;
 }
 

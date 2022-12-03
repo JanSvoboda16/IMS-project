@@ -15,7 +15,7 @@ public:
 
     void Behavior(){
         while(true){
-            auto today = getDay();
+            auto today = GetDay();
 
             double lightTime;
             if(today < 65){
