@@ -32,8 +32,6 @@ class Children : public Process {
                 Wait(HoursToSec(1));
             }
 
-            std::cout << "Dite " << _id << " vstava\n";
-
             // Uvaří si čaj
             auto consumer = _consumers["Kettle"];
             Enter(consumer->TurnOnPrivilegy);

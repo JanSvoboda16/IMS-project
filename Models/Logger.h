@@ -34,7 +34,7 @@ class Logger : public Event {
     }
     void Behavior() {
         file << (int64_t)Time << ";" << (T2)(_object->*_getter)() << "\n";
-        if (Time <= _stopTime) {
+        if (Time < _stopTime) {
             Event::Activate(Time + _step);
         }
     }

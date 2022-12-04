@@ -17,6 +17,14 @@ int main(int argc, char const* argv[]) {
         return 1;
     }
 
+    /**
+     * PARAMETRY PROGRAMU
+     * 1) počet panelů
+     * 2) velikost baterie (kWh)
+     * 3) krok logování hodnot baterie(s)
+     * 4) začátek logování hodnot baterie od startu simulace(s) [volitelné]
+     * 5) doba logování hodnot baterie (s) [volitelné]
+    */
     int panelCount = stoi(argv[1]);
     double batteryCapacity = stod(argv[2]) * 3600000;  // kwh -> J
     double logStep = stod(argv[3]);
@@ -29,18 +37,23 @@ int main(int argc, char const* argv[]) {
         duration = stod(argv[5]);
     }
 
+    std::cout << "SIMULACE \n";
+    std::cout << "Počet panelů: " << panelCount << "\n";
+    std::cout << "Kapacita baterie: " << batteryCapacity/3600000 << " kWh\n";
+    std::cout << "Informace o hodnotách baterie pro vybraný interval budou uloženy do souborů battery_<typ>.csv\n";
+    std::cout << "STATISTICKÉ VÝSLEDKY (ROK): \n";
+
     Init(0, SIM_LENGTH);
     std::map<std::string, EnergyConsumer*> consumers;
     std::shared_ptr<EnergyStore> battery = std::make_shared<EnergyStore>(batteryCapacity);
-    battery->AddEnergy(batteryCapacity / 2);
+    battery->AddEnergy(batteryCapacity / 2); // Inicializace baterie na polovinu kapacity
 
     EnergyGenerator* panels = new EnergyGenerator("data.csv", panelCount, battery);
 
     panels->Activate();
 
     /* Definice spotřebičů */
-
-    (consumers["Fridge"] = new EnergyConsumer(battery, 17, false))->Start(SIM_LENGTH);  // Nstartování lednice
+    (consumers["Fridge"] = new EnergyConsumer(battery, 17, false))->Start(SIM_LENGTH);  // Spuštění lednice
     (consumers["Others"] = new EnergyConsumer(battery, 10, false))->Start(SIM_LENGTH);
     consumers["Kettle"] = new EnergyConsumer(battery, 2000);
     consumers["Microwave"] = new EnergyConsumer(battery, 1200);
@@ -57,6 +70,8 @@ int main(int argc, char const* argv[]) {
     consumers["Notebook4"] = new EnergyConsumer(battery, 45);
 
     Boiler* boiler = new Boiler(60, 15, 2000, battery);
+    
+    // Spuštění dětí a rodičů je naplánováno na ráno
     (new Children(consumers, 1, boiler, FIRST_DAY_OF_SIM))->Activate(24300);
     (new Children(consumers, 2, boiler, FIRST_DAY_OF_SIM))->Activate(24300);
     (new Parent(consumers, 1, boiler, FIRST_DAY_OF_SIM))->Activate(21600);   // Matka
@@ -75,8 +90,9 @@ int main(int argc, char const* argv[]) {
     delete logger;
     delete logger2;
     delete logger3;
-    std::cout << "Celkový počet prodané energie: " << battery->GetOverflowed() / 3600000 << " kWh \n";
-    std::cout << "Celkový počet dokoupené energie: " << battery->GetUnderflowed() / 3600000 << " kWh \n";
+
+    std::cout << "Celkové množství prodané energie: " << battery->GetOverflowed() / 3600000 << " kWh \n";
+    std::cout << "Celkové množství dokoupené energie: " << battery->GetUnderflowed() / 3600000 << " kWh \n\n";
 
     return 0;
 }

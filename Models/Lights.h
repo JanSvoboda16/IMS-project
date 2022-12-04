@@ -35,15 +35,12 @@ public:
                 lightTime = HoursToSec(1.5);
             }  
 
-            std::cout<< "Svetla: ON\n";
             // 6:00 Zapnout
             auto consumer = _consumers["BulbSmall"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(lightTime);
             Wait(lightTime);           
             // 7:30 Vypnout (o víkendu lze i později)
-            std::cout<< "Day: " << today << "\n";
-            std::cout<< "lightTime: " << lightTime/60 << "\tSvetla: OFF\n";
 
 
             double startTime;
@@ -66,14 +63,12 @@ public:
 
             Activate(GetTime(today,0,0,0) + MinsToSec(startTime));
 
-            std::cout<< "Time: "<< startTime << "\tSvetla: ON\n";
             // Zapnout
             consumer = _consumers["BulbBig"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(lightTime);
             Wait(lightTime);           
             // 23:00 Vypnout
-            std::cout<< "Svetla: OFF\n";
 
             Activate(GetTime(today+1,6,0,1));
         }

@@ -23,12 +23,6 @@ class Parent : public Process {
 
     void Behavior() {
         while (true) {
-            if (_id == 1) {
-                std::cout << "Matka vstava\n";
-            } else {
-                std::cout << "Otec vstava\n";
-            }
-
             auto today = GetDay();
             auto dayInYear = today + _firstDayOfSim;
 
@@ -186,6 +180,7 @@ class Parent : public Process {
             if(Time < evening){
                 Activate(evening);
             }
+            
             // Rodič se osprchuje
             Wait(HoursToSec(Uniform(0.5, 2)));
             Seize(_boiler->ShowerFacility);
