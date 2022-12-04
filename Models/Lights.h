@@ -19,7 +19,7 @@ public:
 
             double lightTime;
             if(today < 65){
-                lightTime = MinsToSec(-1.9*today + 455 - 330);       // y = -1.9*x + 455   
+                lightTime = MinsToSec(-1.9*today + 455 - 330); // y = -1.9*x + 455   
             }
             else if(today >= 65 && today < 222){
                 lightTime = 0;
@@ -31,7 +31,7 @@ public:
                 lightTime = MinsToSec(475 - 330);
             }
 
-            if(lightTime > HoursToSec(1.5) && today % 7 < 5){   // mělo by svítit déle než do 7:30 a je všední den
+            if(lightTime > HoursToSec(1.5) && today % 7 < 5){   // melo by svitit dele nez do 7:30 a je vsedni den
                 lightTime = HoursToSec(1.5);
             }  
 
@@ -40,7 +40,7 @@ public:
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(lightTime);
             Wait(lightTime);           
-            // 7:30 Vypnout (o víkendu lze i později)
+            // 7:30 Vypnout (o vikendu lze i pozdeji)
 
 
             double startTime;

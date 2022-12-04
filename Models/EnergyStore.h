@@ -14,17 +14,16 @@ class EnergyStore {
     }
     void AddEnergy(double energy) {
         
-        // Energie je po dobu jednoho vzorku nejdříve uložena 
-        // do pomocné proměnné, která simuluje okamžitý doběr
+        // Energie je po dobu jednoho vzorku nejdrive ulozena 
+        // do pomocne promenne, která simuluje okamzity odber
         auto lastenergy = buffer;
         buffer = energy;
         
-        // Zbylá energie z minulého vzorku je se ztrátou uloží do baterie
+        // Zbyla energie z minulého vzorku je se ztratou ulozena do baterie
         lastenergy *= _efficiency;
 
-        // 
         if ((_value + lastenergy) > _capacity) {
-            // Množství, které se do baterie nevleze odešle do sítě (musíme odebrat ztráty)
+            // Mnozstvi energie, ktere se do baterie nevleze se odesle do sitě (musíme odebrat ztraty)
             _overflowed += (lastenergy - (_capacity - _value)) / _efficiency;
             _value = _capacity;
         } else {
@@ -33,8 +32,8 @@ class EnergyStore {
     }
     void RemoveEnergy(double energy) {
         
-        // Získání dostupné energie přímo z panelů ->
-        // bez ztrát na baterii
+        // Ziskani dostupne energie primo z panelu ->
+        // bez ztrat na baterii
         if (buffer > energy) {
             buffer -= energy;
             energy = 0;
@@ -43,7 +42,7 @@ class EnergyStore {
             buffer = 0;
         }
 
-        // Získání energie z baterie
+        // Ziskank energie z baterie
         if (_value < energy) {
             _undeflowed += energy - _value;
             _value = 0;

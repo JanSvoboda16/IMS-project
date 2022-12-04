@@ -26,7 +26,7 @@ class Parent : public Process {
             auto today = GetDay();
             auto dayInYear = today + _firstDayOfSim;
 
-            // Rozhodování, zdali se jedná o zimní, nebo letní čas
+            // Rozhodovani, zdali se jedna o zimni, nebo letni čas
             bool summerTime = false;
             if (dayInYear > 90 && dayInYear < 304) {
                 summerTime = true;
@@ -37,26 +37,26 @@ class Parent : public Process {
             // sprcha
             //_consumers["Boiler"]->Start(60);
 
-            // Uvaří si čaj
+            // Uvari si caj
             auto consumer = _consumers["Kettle"];
             Enter(consumer->TurnOnPrivilegy);
             consumer->Start(Normal(60, 5));  // 2 min/l -> 0.5 l
             Wait(Normal(60, 5));
 
-            // matka uvaří snídani
+            // matka uvari snidani
             if (_id == 1) {
                 consumer = _consumers["Cooker"];
                 Enter(consumer->TurnOnPrivilegy);
                 auto jobTime = Normal(MinsToSec(20), MinsToSec(2));
-                consumer->Start(jobTime);  // cca 20 min vaří snídani
+                consumer->Start(jobTime);  // cca 20 min vari
                 Wait(jobTime);
             }
 
             Activate(GetTime(today, 7 - summerTime, 30, 0));
 
-            if (today % 7 < 5) {  // všední den
+            if (today % 7 < 5) {  // vsedni den
 
-                // Návrat z Práce 16:30
+                // Návrat z prace 16:30
                 Activate(GetTime(today, 16 - summerTime, 30, 0));
 
                 // otec vysaje
@@ -64,7 +64,7 @@ class Parent : public Process {
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(10), MinsToSec(1));
-                    consumer->Start(jobTime);  // cca 10 min vysává
+                    consumer->Start(jobTime);  // cca 10 min vysava
                     Wait(jobTime);
                 }
 
@@ -77,7 +77,7 @@ class Parent : public Process {
 
                 Wait(Uniform(MinsToSec(10), MinsToSec(60)));
 
-                // matka zapne myčku
+                // matka zapne mycku
                 if (_id == 1 && Random() <= 0.5) {  // 50%
                     consumer = _consumers["Dishwasher"];
                     Enter(consumer->TurnOnPrivilegy);
@@ -86,7 +86,7 @@ class Parent : public Process {
 
                 Wait(Uniform(MinsToSec(10), MinsToSec(60)));
 
-                // Zapne si počítač
+                // Zapne si pocitac
                 if (_id == 1) {
                     consumer = _consumers["Notebook3"];
                 } else {
@@ -94,16 +94,16 @@ class Parent : public Process {
                 }
                 Enter(consumer->TurnOnPrivilegy);
                 auto timeOnComputer = Uniform(HoursToSec(0.5), HoursToSec(3));
-                consumer->Start(timeOnComputer);  // Rodič stráví u počítače 0.5 - 3 hodiny
+                consumer->Start(timeOnComputer);  // Rodic stravi u pocitace 0.5 - 3 hodiny
                 Wait(timeOnComputer);
-            } else {  // víkend
+            } else {  // vikend
 
-                // otec Vysaje
+                // otec vysaje
                 if (_id == 2 && Random() <= 0.5) {  // 50%
                     consumer = _consumers["Vacuum"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(MinsToSec(10), MinsToSec(1));
-                    consumer->Start(jobTime);  // cca 10 min vysává
+                    consumer->Start(jobTime);  // cca 10 min vysava
                     Wait(jobTime);
                 }
 
@@ -116,7 +116,7 @@ class Parent : public Process {
 
                 Wait(Uniform(MinsToSec(10), MinsToSec(60)));
 
-                // Zapne si počítač
+                // Zapne si pocitac
                 if (_id == 1) {
                     consumer = _consumers["Notebook3"];
                 } else {
@@ -127,18 +127,18 @@ class Parent : public Process {
                 consumer->Start(timeOnComputer);  // Rodič stráví u počítače 0.5 - 1.5 hodiny
                 Wait(timeOnComputer);
 
-                // Otec uvaří oběd
+                // Otec uvari obed
                 if (_id == 2) {
                     consumer = _consumers["Cooker"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(HoursToSec(1), MinsToSec(10));
-                    consumer->Start(jobTime);  // cca 1 hodinu vaří
+                    consumer->Start(jobTime);  // cca 1 hodinu vari
                     Wait(jobTime);
                 }
 
-                Wait(Normal(MinsToSec(20), MinsToSec(4)));  // obědvá
+                Wait(Normal(MinsToSec(20), MinsToSec(4)));  // obedva
 
-                // matka zapne myčku
+                // matka zapne mycku
                 if (_id == 1) {
                     consumer = _consumers["Dishwasher"];
                     Enter(consumer->TurnOnPrivilegy);
@@ -147,24 +147,24 @@ class Parent : public Process {
 
                 Wait(Uniform(MinsToSec(10), MinsToSec(40)));
 
-                // matka upeče buchtu
+                // matka upece buchtu
                 if (_id == 1 && Random() < 0.5) {
                     consumer = _consumers["Oven"];
                     Enter(consumer->TurnOnPrivilegy);
                     auto jobTime = Normal(HoursToSec(1.5), MinsToSec(15));
-                    consumer->Start(jobTime);  // cca 1.5 hodiny peče
+                    consumer->Start(jobTime);  // cca 1.5 hodiny pece
                     Wait(jobTime);
                 }
 
                 Wait(Uniform(MinsToSec(30), MinsToSec(60)));
 
-                // Uvaří si čaj
+                // Uvari si caj
                 consumer = _consumers["Kettle"];
                 Enter(consumer->TurnOnPrivilegy);
                 consumer->Start(60);  // 2 min/l -> 0.5 l
                 Wait(Normal(20, 2));
 
-                // Zapne si počítač
+                // Zapne si pocitac
                 if (_id == 1) {
                     consumer = _consumers["Notebook3"];
                 } else {
@@ -172,7 +172,7 @@ class Parent : public Process {
                 }
                 Enter(consumer->TurnOnPrivilegy);
                 timeOnComputer = Uniform(HoursToSec(1.5), HoursToSec(3));
-                consumer->Start(timeOnComputer);  // Rodič stráví u počítače 1.5 - 3 hodiny
+                consumer->Start(timeOnComputer);  // Rodic stravi u pocitace 1.5 - 3 hodiny
                 Wait(timeOnComputer);
             }
 
@@ -181,11 +181,11 @@ class Parent : public Process {
                 Activate(evening);
             }
             
-            // Rodič se osprchuje
+            // Rodic se osprchuje
             Wait(HoursToSec(Uniform(0.5, 2)));
             Seize(_boiler->ShowerFacility);
             double showerTime = MinsToSec(Normal(10, 2.5));
-            _boiler->RemoveWater(showerTime * 0.14, 40);  // 0.14 l/s => naměřeno
+            _boiler->RemoveWater(showerTime * 0.14, 40);  // 0.14 l/s => namereno
             Wait(showerTime);
             Release(_boiler->ShowerFacility);
 

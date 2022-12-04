@@ -25,7 +25,7 @@ class Boiler : public Process {
         }
     }
 
-    // Odebírá horkou vodu z bojleru a míchá ji se studenou tak, aby měla požadovanou teplotu
+    // Odebira horkou vodu z bojleru a micha ji se studenou vodou tak, aby mela pozadovanou teplotu
     void RemoveWater(double litres, double temperature) {
         _litresToHeat += litres * (temperature - _inputTemp) / (_tempToHeat - _inputTemp);
         if (!isActive && !_delayedStartup) {
@@ -45,7 +45,7 @@ class Boiler : public Process {
                 double heatedLitres = energy / (4200 * (deltaT)) * 0.85;
                 _litresToHeat -= heatedLitres;
 
-                // Vrácení energie za přebytečnou vodu
+                // Vraceni energie za prebytecnou vodu
                 if (_litresToHeat < 0) {
                     double overflowed = 0 - _litresToHeat;
                     energy -= overflowed * 4200 * deltaT / 0.85;
@@ -58,7 +58,7 @@ class Boiler : public Process {
             }
             isActive = false;
 
-            // Opožděné spuštění boileru
+            // Opozdene spousteni bojleru
             if(_delayedStartup){
                 Activate(GetTime(today+1,10,0,0));
             }else{
